@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống gợi ý món ăn</title>
+    <script>
+        function getRecommendation() {
+            const loai_mon = document.getElementById("loai_mon").value;
+            const huong_vi = document.getElementById("huong_vi").value;
+            const che_bien = document.getElementById("che_bien").value;
+
+            fetch("/predict", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({loai_mon, huong_vi, che_bien})
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("result").innerText = "Món ăn gợi ý: " + data.recommendation;
+                })
+                .catch(error => console.error("Lỗi:", error));
+        }
+    </script>
+</head>
+<body style="font-family: Arial; padding: 2rem">
+<div style="width: 30%; margin: auto; padding: 1rem; background-color: cornflowerblue; color: white">
+    <h2 style="text-align: center">Chọn sở thích để gợi ý món ăn</h2>
+
+    <div style="width: 100%; margin: auto; display: flex; flex-direction: column; justify-content: center">
+        <div style="width: 100%; display: flex; justify-content: space-between">
+            <label>Loại món:</label>
+            <select id="loai_mon">
+                <option value="com">Cơm</option>
+                <option value="mi">Mì</option>
+                <option value="bun">Bún</option>
+                <option value="lau">Lẩu</option>
+                <option value="chay">Món chay</option>
+                <option value="banh">Bánh</option>
+            </select>
+        </div>
+        </br>
+
+        <div style="width: 100%; display: flex; justify-content: space-between">
+            <label>Hương vị:</label>
+            <select id="huong_vi">
+                <option value="man">Mặn</option>
+                <option value="dam_da">Đậm đà</option>
+                <option value="thanh_mat">Thanh mát</option>
+                <option value="cay">Cay</option>
+            </select>
+        </div>
+        <br>
+
+        <div style="width: 100%; display: flex; justify-content: space-between">
+            <label>Chế biến:</label>
+            <select id="che_bien">
+                <option value="chien">Chiên</option>
+                <option value="hap">Hấp</option>
+                <option value="luoc">Luộc</option>
+                <option value="ham">Hầm</option>
+            </select>
+        </div>
+        <br>
+    </div>
+    <div style="width: 100%; text-align: center; margin: auto">
+        <button onclick="getRecommendation()"
+                style="font-weight: bold;border: none; padding: 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px">
+            Gợi ý món ăn
+        </button>
+    </div>
+    <h3 style="text-align: center" id="result"></h3>
+</div>
+</body>
+</html>
